@@ -68,7 +68,7 @@ Write-Host "          第三步：检查 SELinux 状态" -ForegroundColor Cyan
 Write-Host "========================================`n" -ForegroundColor Cyan
 $SELINUX_STATUS = (adb shell getenforce | Out-String).Trim()
 
-if ($SELINUX_STATUS -eq "Enforcing") {
+if ($SELINUX_STATUS -eq "Permissive") {
     Write-Host "✅ SELinux 状态正常！" -ForegroundColor Green
     Write-Host "   - 返回信息：$SELINUX_STATUS`n"
 } else {
