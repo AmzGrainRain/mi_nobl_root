@@ -10,22 +10,4 @@
 
 ## 使用步骤
 
-手机处于开机状态时，进入 `root` 文件夹，双击执行 `run.ps1` 脚本，仔细根据提示获取 adb root 权限。
-
-成功获得 adb root 权限后，进入 `ksu` 文件夹，双击执行 `run.ps1` 脚本，根据提示安装 ksu。
-
-成功获得 adb root 权限后也可以进入 `magisk` 文件夹，双击执行 `run.ps1` 脚本，根据提示安装 magisk。
-
-**magisk 与 ksu 建议二选一，不要同时安装。**
-
-**如果非要安装两个，请先安装 magisk 后再安装 ksu。**
-
-## adb root 权限获取示例
-
-![adb root](./images/adb-root.jpg)
-
-## ksu 安装示例
-
-![ksu-1](./images/ksu-1.jpg)
-
-![ksu-2](./images/ksu-2.jpg)
+手机处于开机状态时，双击运行 run.ps1
