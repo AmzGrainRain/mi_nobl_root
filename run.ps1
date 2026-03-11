@@ -1,5 +1,5 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-$ADB_PATH = (Resolve-Path -Path ..\adb).Path
+$ADB_PATH = (Resolve-Path -Path .\adb).Path
 $env:PATH += ";$ADB_PATH"
 
 # 定义核心变量
