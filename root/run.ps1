@@ -44,7 +44,7 @@ Write-Host "`n⚙️  正在通过漏洞设置 SELinux 为 Permissive ..." -Fore
 fastboot oem set-gpu-preemption 0 androidboot.selinux=permissive
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ 命令执行失败！" -ForegroundColor Red
-    [void][System.Console]::ReadKey($true)
+    pause
     exit 1
 }
 
@@ -53,7 +53,7 @@ Write-Host "🚀 正在引导设备进入系统..." -ForegroundColor Yellow
 fastboot continue
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ 命令执行失败！" -ForegroundColor Red
-    [void][System.Console]::ReadKey($true)
+    pause
     exit 1
 }
 
@@ -70,7 +70,7 @@ Write-Host "`n🔍 正在等待设备 ADB 连接..." -ForegroundColor Yellow
 adb wait-for-device
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ 设备 ADB 连接超时！" -ForegroundColor Red
-    [void][System.Console]::ReadKey($true)
+    pause
     exit 1
 }
 
@@ -79,17 +79,17 @@ Write-Host "📤 正在推送 resetprop 文件到 /data/local/tmp/resetprop ..."
 adb push resetprop /data/local/tmp/
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ resetprop 文件推送失败！" -ForegroundColor Red
-    [void][System.Console]::ReadKey($true)
+    pause
     exit 1
 }
 adb shell chmod +x /data/local/tmp/resetprop
 
 # 推送 rsp.sh 脚本
 Write-Host "📤 正在推送 rsp.sh 脚本到 /data/local/tmp/rsp.sh ..." -ForegroundColor Yellow
-adb push ./rsp.sh /data/local/tmp/
+adb push .\rsp.sh /data/local/tmp/
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ rsp.sh 脚本推送失败！" -ForegroundColor Red
-    [void][System.Console]::ReadKey($true)
+    pause
     exit 1
 }
 
@@ -97,9 +97,10 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "⚙️  正在执行 rsp.sh 脚本..." -ForegroundColor Yellow
 Start-Sleep -Milliseconds 300
 adb shell service call miui.mqsas.IMQSNative 21 i32 1 s16 "sh" i32 1 s16 "/data/local/tmp/rsp.sh" s16 "/sdcard/resetprop.txt" i32 60
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "⚠️  rsp.sh 脚本执行可能存在异常，请检查位于 /sdcard/resetprop.txt 的日志输出！" -ForegroundColor Yellow
-}
+
+# 重启 adbd 服务
+Write-Host "`n🔄 正在重启 ADB 服务..." -ForegroundColor Yellow
+adb shell 'kill -9 $(pidof adbd)'
 
 # 等待设备重新连接
 Write-Host "`n🔍 等待 ADB 服务重启并重新连接设备..." -ForegroundColor Yellow
@@ -119,5 +120,4 @@ Write-Host "`n========================================" -ForegroundColor Cyan
 Write-Host "          脚本执行完成！" -ForegroundColor Cyan
 Write-Host "========================================`n" -ForegroundColor Cyan
 Write-Host "📌 请检查以上输出信息，确认所有步骤是否成功完成。" -ForegroundColor Yellow
-Start-Sleep -Seconds 30
 pause
