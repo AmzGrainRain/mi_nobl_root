@@ -2,10 +2,6 @@
 $ADB_PATH = (Resolve-Path -Path .\adb).Path
 $env:PATH += ";$ADB_PATH"
 
-# 定义核心变量
-$KSU_MANAGER = ".\KernelSU_v3.1.0-29-gf0615d3c_32331-release.apk"
-$KSUD = ".\ksud-aarch64-linux-android"
-
 # 1. 初始准备阶段
 Write-Host "`n========================================" -ForegroundColor Cyan
 Write-Host "          第一步：准备进入 Fastboot 模式" -ForegroundColor Cyan
@@ -85,17 +81,13 @@ if ($SELINUX_STATUS -eq "Permissive") {
 Write-Host "`n========================================" -ForegroundColor Cyan
 Write-Host "          第四步：部署 KernelSU" -ForegroundColor Cyan
 Write-Host "========================================`n" -ForegroundColor Cyan
-Write-Host "📋 初始化配置信息：" -ForegroundColor Cyan
-Write-Host "   - ADB 路径：$ADB_HOME"
-Write-Host "   - KernelSU Manager：$KSU_MANAGER"
-Write-Host "   - KernelSU Daemon：$KSUD`n"
 Write-Host "✅ 确认后按任意键继续..." -ForegroundColor Green
 [void][System.Console]::ReadKey($true)
 
 try {
     # 推送 KernelSU Daemon 二进制文件
     Write-Host "   - 推送 KernelSU Daemon 到：/data/local/tmp/ksud"
-    adb push $KSUD "/data/local/tmp/ksud"
+    adb push .\ksud "/data/local/tmp/ksud"
 
     # 设置权限
     Write-Host "   - 设置 KernelSU Daemon 权限：chmod 755 /data/local/tmp/ksud"
@@ -108,10 +100,9 @@ try {
 
     # 安装 KernelSU Manager
     if ((adb shell pm path me.weishu.kernelsu | Out-String).Trim() -eq '') {
-        $apkFileName = Split-Path -Path $KSU_MANAGER -Leaf
         Write-Host "   - 安装 KernelSU Manager..."
-        adb push $KSU_MANAGER "/data/local/tmp/$apkFileName"
-        adb shell "pm install -r /data/local/tmp/$apkFileName"
+        adb push .\ksu.apk "/data/local/tmp/ksu.apk"
+        adb shell "pm install -r /data/local/tmp/ksu.apk"
 
         Write-Host "   - 删除临时文件..."
         adb shell "rm -f /data/local/tmp/$apkFileName"
