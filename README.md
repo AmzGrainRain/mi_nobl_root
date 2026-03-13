@@ -17,7 +17,11 @@ fastboot oem set-gpu-preemption 0 androidboot.selinux=permissive
 fastboot reboot
 ```
 
-## 使用方法
+## 一键部署 KernelSU 使用方法
+
+- 双击运行 `一键部署KernelSU.exe`，根据提示操作
+
+## Powershell 版本一键部署 KernelSU 使用方法
 
 - 如果你不确定是否有 powershell7 环境，那么就先安装它，具体方法百度或问 AI
 - 首次安装 powershell7 后，记得右键以管理员身份运行 `bypass.ps1` 脚本
