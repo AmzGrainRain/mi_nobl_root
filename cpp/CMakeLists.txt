@@ -8,15 +8,15 @@ endif()
 
 set(MSVC_RUNTIME_LIBRARY "MultiThreaded<$<CONFIG:Debug>:Debug>")
 
-project ("mi_nobl_ksu")
+project("nobl_ksu")
 
 if(MSVC)
     add_compile_options(/utf-8 /Oi /Gy /GS- /GR-)
     add_link_options(/LTCG /OPT:REF /OPT:ICF /RELEASE /DYNAMICBASE:NO)
 endif()
 
-add_executable (mi_nobl_ksu "mi_nobl_ksu.cpp" )
+add_executable(nobl_ksu "nobl_ksu.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET mi_nobl_ksu PROPERTY CXX_STANDARD 23)
+  set_property(TARGET nobl_ksu PROPERTY CXX_STANDARD 23)
 endif()
